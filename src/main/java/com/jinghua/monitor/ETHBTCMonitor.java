@@ -7,6 +7,8 @@ package com.jinghua.monitor;
 import com.jinghua.ScalperApplication;
 import com.jinghua.constants.StorageConstant;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnError;
@@ -20,11 +22,13 @@ import java.math.BigDecimal;
 @ClientEndpoint
 public class ETHBTCMonitor extends AbstractMonitor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ETHBTCMonitor.class);
+
     @OnMessage
     public void onMessage(String message) throws JSONException {
         doMessage(message);
         StorageConstant.ETHBTCSS = true;
-//        System.out.println("ETHBTC bid: " +  StorageConstant.ETHBTCbid + " " + StorageConstant.ETHBTCbidVol+" ask: " + StorageConstant.ETHBTCask + " " + StorageConstant.ETHBTCaskVol);
+        LOGGER.info("ETHBTC bid: " + StorageConstant.ETHBTCbid + " " + StorageConstant.ETHBTCbidVol + " ask: " + StorageConstant.ETHBTCask + " " + StorageConstant.ETHBTCaskVol);
         if (StorageConstant.ETHBTCSS && StorageConstant.BNBBTCSS && StorageConstant.BNBETHSS) {
             DetectArbitrage.doDetectArbitrage("BNB");
         }

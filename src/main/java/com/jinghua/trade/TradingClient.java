@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class TradingClient {
 
-    private static Logger logger = LoggerFactory.getLogger(TradingClient.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(TradingClient.class);
 
     private BinanceApiRestClient client;
     private String baseCurrency;
@@ -87,25 +87,25 @@ public class TradingClient {
     // * IOC (Immediate or Cancel) orders fills all or part of an order immediately and cancels the remaining part of the order.
     public NewOrderResponse buy(int quantity, double price) {
         String priceString = String.format("%.8f", price).replace(",", ".");
-        logger.info(String.format("Buying %d for %s\n", quantity, priceString));
+        LOGGER.info(String.format("Buying %d for %s\n", quantity, priceString));
         NewOrder order = new NewOrder(symbol, OrderSide.BUY, OrderType.LIMIT, TimeInForce.GTC, "" + quantity, priceString);
         return client.newOrder(order);
     }
 
     public void sell(int quantity, double price) {
         String priceString = String.format("%.8f", price).replace(",", ".");
-        logger.info(String.format("Selling %d for %s\n", quantity, priceString));
+        LOGGER.info(String.format("Selling %d for %s\n", quantity, priceString));
         NewOrder order = new NewOrder(symbol, OrderSide.SELL, OrderType.LIMIT, TimeInForce.GTC, "" + quantity, priceString);
         client.newOrder(order);
     }
 
     public void sellMarket(int quantity) {
         if (quantity > 0) {
-            logger.info("Selling to MARKET with quantity " + quantity);
+            LOGGER.info("Selling to MARKET with quantity " + quantity);
             NewOrder order = new NewOrder(symbol, OrderSide.SELL, OrderType.MARKET, null, "" + quantity);
             client.newOrder(order);
         } else {
-            logger.info("not executing - 0 quantity sell");
+            LOGGER.info("not executing - 0 quantity sell");
         }
     }
 
@@ -118,13 +118,13 @@ public class TradingClient {
     }
 
     public void cancelOrder(long orderId) {
-        logger.info("Cancelling order " + orderId);
+        LOGGER.info("Cancelling order " + orderId);
         client.cancelOrder(new CancelOrderRequest(symbol, orderId));
     }
 
     public void panicSell(double lastKnownAmount, double lastKnownPrice) {
-        logger.error("!!!! PANIC SELL !!!!");
-        logger.warn(String.format("Probably selling %.8f for %.8f", lastKnownAmount, lastKnownPrice));
+        LOGGER.error("!!!! PANIC SELL !!!!");
+        LOGGER.warn(String.format("Probably selling %.8f for %.8f", lastKnownAmount, lastKnownPrice));
         cancelAllOrders();
         sellMarket(Double.valueOf(getTradingBalance().getFree()).intValue());
     }

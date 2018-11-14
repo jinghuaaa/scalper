@@ -1,9 +1,9 @@
 #!/bin/bash
 USER_NAME=`whoami`
-if [ "$USER_NAME" = "root" ];then
-    echo "----->Root user can not shutdown app.<-----"
-    exit 1
-fi
+#if [ "$USER_NAME" = "root" ];then
+    #echo "----->Root user can not shutdown app.<-----"
+    #exit 1
+#fi
 
 cd `dirname $0`
 BIN_DIR=`pwd`/

@@ -7,6 +7,8 @@ package com.jinghua.monitor;
 import com.jinghua.ScalperApplication;
 import com.jinghua.constants.StorageConstant;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.OnError;
@@ -20,11 +22,13 @@ import java.math.BigDecimal;
 @ClientEndpoint
 public class BNBBTCMonitor extends AbstractMonitor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BNBBTCMonitor.class);
+
     @OnMessage
     public void onMessage(String message) throws JSONException {
         doMessage(message);
         StorageConstant.BNBBTCSS = true;
-//        System.out.println("BNBBTC bid: " +  Storage.BNBBTCbid + " " + Storage.BNBBTCbidVol+" ask: " + Storage.BNBBTCask + " " + Storage.BNBBTCaskVol);
+        LOGGER.info("BNBBTC bid: " + StorageConstant.BNBBTCbid + " " + StorageConstant.BNBBTCbidVol + " ask: " + StorageConstant.BNBBTCask + " " + StorageConstant.BNBBTCaskVol);
         if (StorageConstant.ETHBTCSS && StorageConstant.BNBBTCSS && StorageConstant.BNBETHSS) {
             DetectArbitrage.doDetectArbitrage("BNB");
         }
